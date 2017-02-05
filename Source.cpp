@@ -154,6 +154,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					if (lpByte)
 					{
 						const SIZE_T size = (int)GlobalSize(lpByte);
+						delete pImage;
 						pImage = LoadImageFromMemory(lpByte, size);
 						GlobalFree(lpByte);
 						if (filename == lpszFileName[sizeof(lpszFileName) / sizeof(LPCTSTR) - 1] ||
@@ -161,7 +162,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 						{
 							break;
 						}
-						delete pImage;
+						else
+						{
+							delete pImage;
+						}
 					}
 				}
 				InvalidateRect(hWnd, 0, 0);
