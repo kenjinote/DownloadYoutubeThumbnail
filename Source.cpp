@@ -143,17 +143,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			GetWindowText(hEdit, szURL, 1024);
 			if (lstrlen(szURL) > 0 && GetVideoID(szURL, szID))
 			{
-				lstrcpy(szURL, TEXT("http://i.ytimg.com/vi/"));
-				lstrcat(szURL, szID);
-				lstrcat(szURL, TEXT("/maxresdefault.jpg"));
-				LPBYTE lpByte = DownloadToMemory(szURL);
-				if (lpByte)
+				LPCTSTR lpszFileName[] = { TEXT("maxresdefault.jpg"), TEXT("sddefault.jpg"), TEXT("hqdefault.jpg"), TEXT("mqdefault.jpg"), TEXT("default.jpg") };
+				for (auto filename : lpszFileName)
 				{
-					const SIZE_T size = (int)GlobalSize(lpByte);
-					pImage = LoadImageFromMemory(lpByte, size);
-					GlobalFree(lpByte);
-					InvalidateRect(hWnd, 0, 0);
+					lstrcpy(szURL, TEXT("http://i.ytimg.com/vi/"));
+					lstrcat(szURL, szID);
+					lstrcat(szURL, TEXT("/"));
+					lstrcat(szURL, filename);
+					LPBYTE lpByte = DownloadToMemory(szURL);
+					if (lpByte)
+					{
+						const SIZE_T size = (int)GlobalSize(lpByte);
+						pImage = LoadImageFromMemory(lpByte, size);
+						GlobalFree(lpByte);
+						if (filename == lpszFileName[sizeof(lpszFileName) / sizeof(LPCTSTR) - 1] ||
+							(pImage != 0 && (pImage->GetWidth() > 120 && pImage->GetWidth() > 90)))
+						{
+							break;
+						}
+						delete pImage;
+					}
 				}
+				InvalidateRect(hWnd, 0, 0);
 			}
 		}
 		break;
