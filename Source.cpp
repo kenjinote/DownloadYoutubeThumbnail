@@ -45,18 +45,18 @@ BOOL SetDragImage(IN HWND hWnd, IN IDragSourceHelper *pDragSourceHelper, IN IDat
 class CDropTarget : public IDropTarget
 {
 public:
-	CDropTarget::CDropTarget(HWND hwnd)
+	CDropTarget(HWND hwnd)
 	{
 		m_cRef = 1;
 		m_hwnd = hwnd;
 		CoCreateInstance(CLSID_DragDropHelper, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_pDropTargetHelper));
 	}
-	CDropTarget::~CDropTarget()
+	~CDropTarget()
 	{
 		if (m_pDropTargetHelper != NULL)
 			m_pDropTargetHelper->Release();
 	}
-	STDMETHODIMP CDropTarget::QueryInterface(REFIID riid, void **ppvObject)
+	STDMETHODIMP QueryInterface(REFIID riid, void **ppvObject)
 	{
 		*ppvObject = NULL;
 		if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IDropTarget))
@@ -66,11 +66,11 @@ public:
 		AddRef();
 		return S_OK;
 	}
-	STDMETHODIMP_(ULONG) CDropTarget::AddRef()
+	STDMETHODIMP_(ULONG) AddRef()
 	{
 		return InterlockedIncrement(&m_cRef);
 	}
-	STDMETHODIMP_(ULONG) CDropTarget::Release()
+	STDMETHODIMP_(ULONG) Release()
 	{
 		if (InterlockedDecrement(&m_cRef) == 0)
 		{
@@ -79,25 +79,25 @@ public:
 		}
 		return m_cRef;
 	}
-	STDMETHODIMP CDropTarget::DragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
+	STDMETHODIMP DragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 	{
 		if (m_pDropTargetHelper != NULL)
 			m_pDropTargetHelper->DragEnter(m_hwnd, pDataObj, (LPPOINT)&pt, *pdwEffect);
 		return S_OK;
 	}
-	STDMETHODIMP CDropTarget::DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
+	STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 	{
 		if (m_pDropTargetHelper != NULL)
 			m_pDropTargetHelper->DragOver((LPPOINT)&pt, *pdwEffect);
 		return S_OK;
 	}
-	STDMETHODIMP CDropTarget::DragLeave()
+	STDMETHODIMP DragLeave()
 	{
 		if (m_pDropTargetHelper != NULL)
 			m_pDropTargetHelper->DragLeave();
 		return S_OK;
 	}
-	STDMETHODIMP CDropTarget::Drop(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
+	STDMETHODIMP Drop(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 	{
 		if (m_pDropTargetHelper != NULL)
 			m_pDropTargetHelper->Drop(pDataObj, (LPPOINT)&pt, *pdwEffect);
@@ -112,9 +112,9 @@ private:
 class CDropSource : public IDropSource
 {
 public:
-	CDropSource::CDropSource() { m_cRef = 1; }
-	CDropSource::~CDropSource() {}
-	STDMETHODIMP CDropSource::QueryInterface(REFIID riid, void **ppvObject)
+	CDropSource() { m_cRef = 1; }
+	~CDropSource() {}
+	STDMETHODIMP QueryInterface(REFIID riid, void **ppvObject)
 	{
 		*ppvObject = NULL;
 		if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IDropSource))
@@ -124,11 +124,11 @@ public:
 		AddRef();
 		return S_OK;
 	}
-	STDMETHODIMP_(ULONG) CDropSource::AddRef()
+	STDMETHODIMP_(ULONG) AddRef()
 	{
 		return InterlockedIncrement(&m_cRef);
 	}
-	STDMETHODIMP_(ULONG) CDropSource::Release()
+	STDMETHODIMP_(ULONG) Release()
 	{
 		if (InterlockedDecrement(&m_cRef) == 0)
 		{
@@ -137,7 +137,7 @@ public:
 		}
 		return m_cRef;
 	}
-	STDMETHODIMP CDropSource::QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState)
+	STDMETHODIMP QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState)
 	{
 		if (fEscapePressed)
 			return DRAGDROP_S_CANCEL;
@@ -145,7 +145,7 @@ public:
 			return DRAGDROP_S_DROP;
 		return S_OK;
 	}
-	STDMETHODIMP CDropSource::GiveFeedback(DWORD dwEffect)
+	STDMETHODIMP GiveFeedback(DWORD dwEffect)
 	{
 		return DRAGDROP_S_USEDEFAULTCURSORS;
 	}
