@@ -1,6 +1,5 @@
 # GetYoutubeThumbnail
-YouTubeの動画URLからサムネイルを取得する
-
+YouTubeの動画URLからサムネイルを取得するプログラム
 YouTubeの動画のURLが仮に
 
 https://www.youtube.com/watch?v=XXXXXXXXXXX
