@@ -351,7 +351,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 								DeleteFile(szImageFilePath);
 							}
 							lstrcpy(szImageFilePath, szTempDirectory);
-							PathAppend(szImageFilePath, filename);
+							PathAddBackslash(szImageFilePath);
+							lstrcat(szImageFilePath, szID);
+							lstrcat(szImageFilePath, TEXT("_"));
+							lstrcat(szImageFilePath, filename);
 							const HANDLE hFile = CreateFile(szImageFilePath, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL);
 							DWORD dwWritten;
 							WriteFile(hFile, lpByte, (DWORD)size, &dwWritten, NULL);
