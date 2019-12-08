@@ -13,6 +13,7 @@
 
 #include <shlobj.h>
 #include <shlwapi.h>
+#include "resource.h"
 
 #define DRAG_IMAGE_WIDTH (1280/4)
 #define DRAG_IMAGE_HEIGHT (720/4)
@@ -446,7 +447,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPreInst, LPSTR pCmdLine, int 
 	Gdiplus::GdiplusStartupInput gdiSI;
 	Gdiplus::GdiplusStartup(&gdiToken, &gdiSI, 0);
 	MSG msg;
-	const WNDCLASS wndclass = { CS_HREDRAW | CS_VREDRAW,WndProc,0,DLGWINDOWEXTRA,hInstance,0,LoadCursor(0,IDC_ARROW),0,0,szClassName };
+	const WNDCLASS wndclass = { CS_HREDRAW | CS_VREDRAW,WndProc,0,DLGWINDOWEXTRA,hInstance,LoadIcon(hInstance,MAKEINTRESOURCE(IDI_ICON1)) ,LoadCursor(0,IDC_ARROW),0,0,szClassName };
 	RegisterClass(&wndclass);
 	const HWND hWnd = CreateWindow(szClassName, TEXT("YouTubeの動画URLからサムネイルを取得する"), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN, CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, 0, 0, hInstance, 0);
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
